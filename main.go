@@ -35,6 +35,7 @@ func main() {
 	})
 
 	api.GET("rtc/:channelName/:role/:tokenType/:uid/", getRtcToken)
+	//http://localhost:8080/rtc/testing/publisher/userAccount/123456/
 
 	api.GET("rtm/:uid/", getRtmToken)
 
@@ -45,7 +46,7 @@ func main() {
 
 func getRtcToken(ctx *gin.Context) {
 	// get param values
-	channelName, tokeType, uidStr, role, expireTimestamp, err := parseRtcParams(ctx)
+	channelName, tokenType, uidStr, role, expireTimestamp, err := parseRtcParams(ctx)
 	if err != nil {
 		ctx.Error(err)
 		errMsg := "error generating RTC token" + err.Error()
@@ -56,7 +57,7 @@ func getRtcToken(ctx *gin.Context) {
 		return
 	}
 	// generate the token
-	rtcToken, tokenErr := generateRtcToken(channelName, uidStr, tokeType, role, expireTimestamp)
+	rtcToken, tokenErr := generateRtcToken(channelName, uidStr, tokenType, role, expireTimestamp)
 	// return the token in JSON response
 	if tokenErr != nil {
 		log.Println(tokenErr)
